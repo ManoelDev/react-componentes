@@ -202,11 +202,13 @@ const Table = <T, K extends keyof T>({ data, columns, paginate, totalPage = 0, s
           columns={columns}
         />
         {!data.length && (
-          <S.Tr>
-            <S.Td colSpan={(selectRow ? state.countColumns + 1 : state.countColumns)}>
-              <div className='noItems'>Não há dados a serem exibidos</div>
-            </S.Td>
-          </S.Tr>
+          <S.Tfoot>
+            <S.Tr>
+              <S.Td colSpan={(selectRow ? state.countColumns + 1 : state.countColumns)}>
+                <div className='noItems'>Não há dados a serem exibidos</div>
+              </S.Td>
+            </S.Tr>
+          </S.Tfoot>
         )}
       </S.Table>
       {paginate && (
@@ -215,7 +217,6 @@ const Table = <T, K extends keyof T>({ data, columns, paginate, totalPage = 0, s
           ref={loader}
         >
           {state.loading && <span className="loader-1"></span>}
-          <span className="loader-1"></span>
         </S.ContainerSpinner>
       )}
 

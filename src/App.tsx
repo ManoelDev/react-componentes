@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Table as GenericTable } from './components/GenericTable';
+import { GenericTable } from './components/GenericTable';
 import { ColumnDefinitionType } from './components/GenericTable/table';
 
 interface DataProps {

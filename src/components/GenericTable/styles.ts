@@ -5,10 +5,7 @@ const brand = 'transparent';
 const size = '32px';
 
 export const Container = styled.div`
-  padding-top: 50px;
-  padding-bottom: 0px;
-  padding-left: 50px;
-  padding-right: 50px;
+
 
   background: #fafafa;
 
@@ -92,6 +89,8 @@ export const Tbody = styled.tbody`
     border-right: #f3f3f6 !important;
   }
 `;
+
+export const Tfoot = styled.tfoot``
 
 export const Th = styled.th`
   text-align: start;
