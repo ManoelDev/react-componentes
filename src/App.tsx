@@ -4,23 +4,25 @@ import { GenericTable } from './components/GenericTable';
 import { ColumnDefinitionType } from './components/GenericTable/table';
 
 interface DataProps {
-  albumId: number
-  id: number
-  thumbnailUrl: string
-  title: string
-  url: string
+  albumId: number;
+  id: number;
+  thumbnailUrl: string;
+  title: string;
+  url: string;
 }
 
 const InfiniteScroll = () => {
   const [state, setState] = useState<DataProps[]>([]);
-  const [selectedData, setSelectedData] = useState([] as any)
+  const [selectedData, setSelectedData] = useState([] as any);
 
   const getPhotos = async (page) => {
-    const { status, data }: any = await axios.get(`https://jsonplaceholder.typicode.com/photos?_page=${page}&_limit=30`)
+    const { status, data }: any = await axios.get(
+      `https://jsonplaceholder.typicode.com/photos?_page=${page}&_limit=30`,
+    );
     if (status === 200) {
       setState([...state, ...data]);
     }
-  }
+  };
 
   // useEffect(() => {
   //   getPhotos(1)
@@ -34,7 +36,6 @@ const InfiniteScroll = () => {
       // formatCell: (cel, row) => {
       //   return <img src={cel} alt="asd" width='150' height='150' />
       // },
-
     },
     {
       key: 'title',
@@ -53,7 +54,7 @@ const InfiniteScroll = () => {
       headerTitle: 'Valor (R$)',
       // collWidth: 80,
       formatCell: (cel, row) => {
-        return <div>{cel}</div>
+        return <div>{cel}</div>;
       },
     },
     {
@@ -61,7 +62,7 @@ const InfiniteScroll = () => {
       headerTitle: 'Ações',
       collWidth: 100,
     },
-  ]
+  ];
 
   const selectRow = {
     onSelect: (row, isSelect, rowIndex) => {
@@ -74,10 +75,8 @@ const InfiniteScroll = () => {
       if (isSelect) setSelectedData(rows);
       else setSelectedData([]);
     },
-    selected: selectedData
+    selected: selectedData,
   };
-
-  console.log('Selected', selectedData)
 
   return (
     <div className="container">
@@ -89,7 +88,7 @@ const InfiniteScroll = () => {
         paginate={(p) => getPhotos(p)}
       />
     </div>
-  )
-}
+  );
+};
 
 export default InfiniteScroll;
