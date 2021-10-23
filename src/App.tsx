@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import axios from 'axios';
-import { GenericTable } from './components/GenericTable';
-import { ColumnDefinitionType } from './components/GenericTable/table';
+import { Table as GenericTable, ColumnDefinitionType } from './components/GenericTable';
 
 interface DataProps {
   albumId: number;
@@ -12,47 +11,85 @@ interface DataProps {
 }
 
 const InfiniteScroll = () => {
-  const [state, setState] = useState<DataProps[]>([]);
-  const [selectedData, setSelectedData] = useState([] as any);
+  const [data, setData] = useState<DataProps[]>([]);
+  const observer = useRef<any>(null);
+  const [pagination, setPagination] = useState({
+    isLoading: false,
+    page: 1,
+    totalPages: 4,
+  })
 
-  const getPhotos = async (page) => {
-    const { status, data }: any = await axios.get(
+  const handlePagination = (key, value) => {
+    setPagination((p) => ({ ...p, [key]: value }));
+  }
+
+  const LoadData = useCallback(async (page) => {
+    handlePagination('isLoading', true);
+    const response: any = await axios.get(
       `https://jsonplaceholder.typicode.com/photos?_page=${page}&_limit=30`,
     );
-    if (status === 200) {
-      setState([...state, ...data]);
-    }
-  };
 
-  // useEffect(() => {
-  //   getPhotos(1)
-  // }, [])
+    if (response.status === 404) {
+      handlePagination('totalPages', 1);
+    } else if (response.status === 200) {
+      setData([...data, ...response.data]);
+    }
+    handlePagination('isLoading', false);
+  }, [data]);
+
+  const lastItemRef = async (node, get) => {
+    if (pagination.isLoading) return;
+    const options = {
+      root: null,
+      rootMargin: '10px',
+      threshold: 1.0,
+    };
+
+    if (observer.current) observer.current.disconnect();
+
+    observer.current = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) {
+        const pageLimit = pagination.totalPages ? pagination.page <= pagination.totalPages : pagination.page;
+
+        if (pageLimit) {
+          get(pagination.page)
+          setPagination((p) => { return { ...p, page: p.page + 1 } });
+        }
+
+      }
+    }, options);
+
+    if (node) observer.current.observe(node);
+  };
 
   const oldColumns: ColumnDefinitionType<DataProps, keyof DataProps>[] = [
     {
+      key: 'id',
+      hidden: false,
+      headerTitle: 'ID',
+      columnStyle: {
+        width: 160,
+      },
+    },
+    {
       key: 'thumbnailUrl',
       headerTitle: 'Thumbnail',
-      collWidth: 160,
-      // formatCell: (cel, row) => {
-      //   return <img src={cel} alt="asd" width='150' height='150' />
-      // },
+      columnStyle: {
+        width: 300,
+      },
     },
     {
       key: 'title',
       headerTitle: 'Title',
-      collWidth: 300,
+
     },
     {
       key: 'url',
       headerTitle: 'URL',
-      // formatCell: (cel, row) => {
-      //   return <img src={cel} alt="asd" width='150' />
-      // },
     },
     {
       key: 'albumId',
       headerTitle: 'Valor (R$)',
-      // collWidth: 80,
       formatCell: (cel, row) => {
         return <div>{cel}</div>;
       },
@@ -60,33 +97,20 @@ const InfiniteScroll = () => {
     {
       key: 'id',
       headerTitle: 'Ações',
-      collWidth: 100,
+      formatCell: (cel, row) => {
+        return <div>{cel}</div>;
+      },
     },
   ];
-
-  const selectRow = {
-    onSelect: (row, isSelect, rowIndex) => {
-      if (!selectedData.find((data) => data.id === row.id) && isSelect)
-        setSelectedData((state) => state.concat([row]));
-      else
-        setSelectedData((state) => state.filter((data) => data.id !== row.id));
-    },
-    onSelectAll: (rows, isSelect) => {
-      if (isSelect) setSelectedData(rows);
-      else setSelectedData([]);
-    },
-    selected: selectedData,
-  };
 
   return (
     <div className="container">
       <GenericTable
-        data={state}
+        data={data}
         columns={oldColumns}
-        selectRow={selectRow}
-        totalPage={5}
-        paginate={(p) => getPhotos(p)}
+        paginate={pagination}
       />
+      <div ref={(ref) => lastItemRef(ref, LoadData)} />
     </div>
   );
 };

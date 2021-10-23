@@ -1,13 +1,37 @@
 import styled from 'styled-components';
 
-const lite = '#6d9df9';
+const lite = '#ffffff';
 const brand = 'transparent';
-const size = '32px';
+const size = '18px';
 
-export const Container = styled.div`
+// const blue = rgba(79, 192, 210, 1);
+// const green = rgba(82, 210, 154, 1);
+// const yellow = rgba(231, 196, 104, 0.7);
+// const orange = rgba(235, 118, 85, 1.0);
+// const darkBg = rgba(0, 0, 0, 0.9);
+// const lightBg = rgba(255, 255, 255, 0.1);
+// const text = rgba(255, 255, 255, 0.9);
 
 
-  background: #fafafa;
+
+export const WrapperTable = styled.div``;
+export const TitleTable = styled.div``;
+export const ContainerTable = styled.div`
+
+  position: relative;
+  background: rgba(0, 0, 0, 0.9);
+  display: flex;
+  flex-direction: column;
+  
+  font-family: Nunito Sans;
+
+  
+
+  box-shadow: 3px 3px 5px 0 #e9e9e9;
+  border-radius: 3px;
+  overflow: hidden;
+
+  color: rgba(255, 255, 255, 0.9);
 
   .loading {
     line-height: 16px;
@@ -24,14 +48,11 @@ export const Container = styled.div`
 `;
 
 export const Table = styled.table`
-  display: inline-block;
-  overflow: auto;
-  
-  box-shadow: 3px 3px 5px 0 #e9e9e9;
-  border-radius: 5px;
-
+  display: inline-block; 
   pointer-events: all;
   width: 100%;
+  overflow: auto;
+
 
   border: 0;
   border-spacing: 0px;
@@ -42,8 +63,10 @@ export const Table = styled.table`
   font-family: Quicksand;
   font-size: 14px;
   font-weight: 400;
-  color: #575757;
-  background: #ffffff;
+  
+  col{
+    overflow: hidden;
+  }
 
   ::-webkit-scrollbar {
     width: 6px;
@@ -51,22 +74,22 @@ export const Table = styled.table`
   }
   ::-webkit-scrollbar-thumb {
     background-color: darkgrey;      
-    border-radius: 6px;
+    border-radius: 5px;
   }
+
 `;
 
 export const Thead = styled.thead`
-  background: #edf4fe;
-  height: 42px;
+
+  background: rgba(0, 0, 0, 0.9);
   tr, th{
-    white-space: nowrap;    
+    white-space: nowrap;
+    text-align: start; 
   }
 
   th{
     padding: 8px 16px;
-    width: 100%;
-    border: #f3f3f6!important;
-    vertical-align: middle;
+    width: 20%;
   }
 
   .selection-cell-header {
@@ -77,27 +100,27 @@ export const Thead = styled.thead`
 `;
 
 export const Tbody = styled.tbody`
+  /* tr{
+    :hover{
+     background: rgba(0, 0, 0, 0.4)
+    }
+  } */
   td {
-    font-family: Nunito Sans;
+    
     font-weight: 500;
     padding: 8px 16px;
 
-    border: 1px solid #ddd;
-    border-left: none;
-    border-bottom-color: #f3f3f6 !important;
-    border-top-color: #f3f3f6 !important;
-    border-right: #f3f3f6 !important;
+    white-space: nowrap;
   }
 `;
 
 export const Tfoot = styled.tfoot``
 
-export const Th = styled.th`
-  text-align: start;
-`;
+export const Th = styled.th``;
 
 export const Td = styled.td`
   margin: 0;
+  white-space: nowrap;
 
   img{
     display: flex;
@@ -105,27 +128,15 @@ export const Td = styled.td`
     justify-content: center;
   }
 
-  .noItems{
-    display: flex;
-    white-space: nowrap;
-    height: 42px;
-
-    width: 100%;
-    text-align: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #575757;
-    font-weight: bold;
-  }
 `;
 
 export const Tr = styled.tr`
   /* height: 42px; */
-  white-space: nowrap;
+  white-space: normal;
+  background: rgba(0, 0, 0, 0.2);
 
   :nth-child(even){
-    background: rgb(248, 249, 251);
+    background: rgba(0, 0, 0, 0.4);
   }
   tr td .selection-cell {
     min-width: 48px!important;
@@ -135,10 +146,15 @@ export const Tr = styled.tr`
 `;
 
 export const ContainerSpinner = styled.div`
+  /* position: absolute; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 42px;
   .loader-1 {
     width : ${size};
     height: ${size};
-    border: 5px solid ${lite};
+    border: 4px solid ${lite};
     border-bottom-color: ${brand};
     border-radius: 50%;
     display: inline-block;
@@ -148,5 +164,21 @@ export const ContainerSpinner = styled.div`
   @keyframes rotation {
     0% { transform: rotate(0deg) }
     100% { transform: rotate(360deg) }
+  }
+
+  .noItemsToList{
+    display: flex;
+    white-space: nowrap;
+    height: 42px;
+
+    width: 100%;
+    /* text-align: center; */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+  }
+  span{
+    position: absolute;
   }
 `;
